@@ -1,0 +1,54 @@
+body, html
+{
+    height: 100%;
+    padding: 1%;
+    color: #ffffff;
+}
+.my-pointer
+{
+    cursor: pointer;
+}
+.my-arrow
+{
+    cursor: default;
+}
+.container-fluid, .row
+{
+    height: 100%;
+}
+.my-menu
+{
+    padding-right: 3%;
+}
+#gridContainer
+{
+    width: 450px;
+    height: 450px;
+}
+.grid-box
+{
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+}
+.small-grid
+{
+    width: 100px;
+    height: 100px;
+}
+.k0
+{
+    background-color: #2e55ff;
+}
+.k1
+{
+    background-color: #ff0000;
+}
+.k2
+{
+    background-color: #00a400;
+}
+.k3
+{
+    background-color: #ffff00;
+}
