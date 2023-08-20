@@ -6,12 +6,24 @@ $(document).ready(function()
         constructor() // Initial map before any settings.
         {
             this.grid = [[-1,-1,-1,-1],[-1,-1,-1,-1],[-1,-1,-1,-1],[-1,-1,-1,-1]];
+            this.populated = false;
             this.mapWidth = this.grid[0].length;
             this.mapHeight = this.grid.length;
             this.totalArea = 16;
             this.kingdomList = [];
             this.initializeKindoms();
             this.addClick();
+        }
+
+        resetKingdoms()
+        {
+            let h = this.mapHeight;
+            let w = this.mapWidth;
+            this.grid = Array.from({ length: h }, () => Array(w).fill(-1));
+            this.populated = false;
+            this.kingdomList = [];
+            this.initializeKindoms();
+            this.setGrid();
         }
 
         initializeKindoms() // Setup the kindoms.
@@ -34,16 +46,13 @@ $(document).ready(function()
             this.kingdomList.forEach(el => {console.log(JSON.stringify(el.lands))});
         }
 
-
         resizeMap(grid) // Change the map variables.
         {
             this.grid = grid.concat();
             this.mapWidth = this.grid[0].length;
             this.mapHeight = this.grid.length;
             this.totalArea = this.mapWidth*this.mapHeight;
-            this.kingdomList = [];
-            this.initializeKindoms();
-            this.setGrid();
+            this.resetKingdoms(); 
         }
 
         setGrid() // Resize the html grid.
@@ -53,7 +62,7 @@ $(document).ready(function()
             $('#gridContainer').height(70*this.mapHeight)
             for (let i = 0; i < this.mapHeight; i++)
                 for (let j = 0; j < this.mapWidth; j++)
-                    $('#gridContainer').append(`<div id="${i}-${j}" class="grid-box border rounded m-1"></div>`);
+                    $('#gridContainer').append(`<div id="${i}-${j}" class="grid-box border rounded m-1 my-pointer"></div>`);
             if(this.mapHeight <= 7) this.smallGrid();
             this.addClick();
         }
@@ -116,6 +125,7 @@ $(document).ready(function()
                 if(mapItem.grid[boxRow][boxCol] !== -1)$(`#${boxRow}-${boxCol}`).addClass(`k${mapItem.grid[boxRow][boxCol]}`);
                 // console.log("Kingdoms: ");
                 // mapItem.logKingdoms();
+                mapItem.populated = !mapItem.grid.every(row => row.every(item => item === -1));
             });
         }
 
@@ -477,6 +487,8 @@ $(document).ready(function()
 
     const map = new Map(), updateGrid = (gridHeight, gridWidth) => // Resize the grid.
     {
+        $('#startBtn h3').text("Start");
+        $("#resetBtn").removeClass("d-flex");
         let newGrid = [];
         for (let i = 0; i < gridHeight; i++)
         {
@@ -509,8 +521,24 @@ $(document).ready(function()
         updateGrid(newHeight, map.mapWidth);
     });
 
+    map.resetKingdoms();
+
     $('#startBtn').on("click", function()
     {
-        map.turn();
+        if(map.populated)
+        {
+            $('#startBtn h3').text("Next");
+            $(".grid-box").off("click");
+            $(".grid-box").removeClass("my-pointer");
+            $("#resetBtn").addClass("d-flex");
+            map.turn();
+        }
+    })
+
+    $('#resetBtn').on("click", function()
+    {
+        $("#resetBtn").removeClass("d-flex");
+        $('#startBtn h3').text("Start");
+        map.resetKingdoms();
     })
 })

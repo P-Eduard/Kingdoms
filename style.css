@@ -29,7 +29,6 @@ body, html
 {
     width: 60px;
     height: 60px;
-    cursor: pointer;
 }
 .small-grid
 {
@@ -51,4 +50,13 @@ body, html
 .k3
 {
     background-color: #ffff00;
+}
+#resetBtnContainer
+{
+    height: 50px;
+}
+#resetBtn
+{
+    height: 50px;
+    margin-top: 10px;
 }
